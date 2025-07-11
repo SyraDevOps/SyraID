@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Exemplo - Login com SyraID</title>
+    
+    <!-- Fontes e Ícones -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Estilos da página -->
+    <style>
+        :root {
+            --dark-purple: #1F1C2C;
+            --lavender-gray: #928DAB;
+            --main-text: #EAEAEA;
+            --highlight: #C084FC;
+            --success: #2ECC71;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--dark-purple), var(--lavender-gray));
+            color: var(--main-text);
+        }
+        .container {
+            max-width: 420px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 28, 44, 0.37);
+        }
+        h1 {
+            font-size: 3em; font-weight: 700; margin-bottom: 20px;
+            background: linear-gradient(to right, var(--highlight), var(--main-text));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        #login-status {
+            margin-top: 30px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: rgba(0,0,0,0.2);
+            color: var(--lavender-gray);
+            transition: all 0.3s ease;
+        }
+        #login-status.logged-in {
+            color: var(--dark-purple);
+            background-color: var(--success);
+            font-weight: 600;
+        }
+    </style>
+
+    <!-- PASSO 1: Inclua o script do plugin -->
+    <script src="syra-login.js" defer></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Minha Plataforma</h1>
+        
+        <!-- PASSO 2: Crie um container para o widget -->
+        <div id="syra-login-widget">
+            <!-- O plugin será injetado aqui -->
+        </div>
+
+        <div id="login-status">
+            Aguardando status de login...
+        </div>
+    </div>
+
+    <script>
+        // Aguarda o carregamento completo do DOM
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // PASSO 3: Inicialize o widget
+            // Troque 'http://127.0.0.1:5000' pela URL da sua API se for diferente.
+            const syraWidget = new SyraLoginWidget('syra-login-widget', 'http://127.0.0.1:5000');
+
+            // (Opcional, mas recomendado) Ouça os eventos do widget para atualizar sua página
+            const widgetContainer = document.getElementById('syra-login-widget');
+            const statusBox = document.getElementById('login-status');
+
+            // Evento disparado no login bem-sucedido
+            widgetContainer.addEventListener('syra:login', (event) => {
+                console.log('Login realizado com sucesso!', event.detail);
+                const username = event.detail.payload.username;
+                statusBox.textContent = `Seja bem-vindo(a) de volta, ${username}!`;
+                statusBox.classList.add('logged-in');
+
+                // Aqui você pode, por exemplo, buscar dados do usuário, redirecionar, etc.
+                // Ex: fetchUserProfile(event.detail.token);
+            });
+
+            // Evento disparado no logout
+            widgetContainer.addEventListener('syra:logout', () => {
+                console.log('Usuário deslogado.');
+                statusBox.textContent = 'Você não está logado.';
+                statusBox.classList.remove('logged-in');
+            });
+            
+            // Verifica o estado inicial ao carregar a página
+            const initialToken = localStorage.getItem('syra_jwt');
+            if (initialToken) {
+                 // Dispara um evento "fake" para carregar o estado inicial da UI
+                 const payload = syraWidget.parseJwt(initialToken);
+                 if (payload && payload.exp * 1000 > Date.now()) {
+                    widgetContainer.dispatchEvent(new CustomEvent('syra:login', { detail: { token: initialToken, payload: payload } }));
+                 }
+            }
+
+        });
+    </script>
+
+</body>
+</html>

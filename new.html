@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bem-vindo à Minha Plataforma</title>
+    
+    <!-- Fontes e Ícones (Mesmos do design original) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+    <!-- Estilos (Exatamente os mesmos para manter a consistência) -->
+    <style>
+        :root {
+            --dark-purple: #1F1C2C;
+            --lavender-gray: #928DAB;
+            --light-pearl: #F7F8F8;
+            --main-text: #EAEAEA;
+            --secondary-text: #B4B4B4;
+            --highlight: #C084FC;
+            --error: #FF6B6B;
+            --success: #2ECC71;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--dark-purple), var(--lavender-gray));
+            color: var(--main-text);
+        }
+        .container {
+            max-width: 420px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 28, 44, 0.37);
+        }
+        h1 {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--highlight), var(--main-text));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        h2 { 
+            font-weight: 600; 
+            margin-bottom: 15px; /* Ajuste de margem */
+            color: var(--main-text); 
+        }
+        p.welcome-text {
+            color: var(--secondary-text);
+            margin-bottom: 35px; /* Espaçamento maior antes do botão */
+            line-height: 1.6;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(to right, var(--highlight), #a164df);
+            color: var(--dark-purple);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(192, 132, 252, 0.2);
+            display: flex; /* Para alinhar ícone e texto */
+            align-items: center;
+            justify-content: center;
+            gap: 10px; /* Espaço entre ícone e texto */
+        }
+        button:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 6px 20px rgba(192, 132, 252, 0.4); 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- O título mantém a identidade visual -->
+        <h1>SyraID</h1>
+        
+        <!-- Conteúdo específico desta página -->
+        <h2>Bem-vindo à Nossa Plataforma</h2>
+        <p class="welcome-text">
+            Acesse sua conta de forma rápida e segura utilizando
+            a autenticação de dois fatores do SyraID.
+        </p>
+        
+        <!-- O botão de ação principal -->
+        <button id="go-to-login-btn">
+            <i class="fa-solid fa-shield-halved"></i>
+            Logar com SyraID
+        </button>
+    </div>
+
+    <script>
+        // Seleciona o botão de login
+        const loginButton = document.getElementById('go-to-login-btn');
+
+        // Adiciona um evento de clique ao botão
+        loginButton.addEventListener('click', () => {
+            // Redireciona o usuário para a página de autenticação.
+            // A página 'auth.html' cuidará de verificar se o usuário já tem um token
+            // ou se precisa preencher o formulário.
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

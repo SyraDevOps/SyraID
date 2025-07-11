@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SyraID + Calculadora</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #1F1C2C, #928DAB);
+            color: #EAEAEA;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #C084FC, #EAEAEA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+        }
+
+        #syra-login-container {
+            max-width: 400px;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        #calculator {
+            display: none;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+        }
+
+        #calculator input {
+            width: 80px;
+            padding: 10px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 6px;
+            margin: 5px;
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            text-align: center;
+        }
+
+        #calculator button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            font-size: 1rem;
+            background: #C084FC;
+            border: none;
+            border-radius: 6px;
+            color: #1F1C2C;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #calculator button:hover {
+            background: #a164df;
+        }
+
+        #result {
+            margin-top: 15px;
+            font-size: 1.3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Área Protegida com SyraID</h1>
+
+    <div id="syra-login-container"></div>
+
+    <div id="calculator">
+        <h2>Calculadora Simples</h2>
+        <input type="number" id="num1" placeholder="Número 1">
+        <input type="number" id="num2" placeholder="Número 2">
+        <br>
+        <button onclick="calcular()">Somar</button>
+        <div id="result"></div>
+    </div>
+
+    <script src="syra-login.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const widget = new SyraLoginWidget("syra-login-container", "http://localhost:5000"); // Altere para sua API
+
+            const calculator = document.getElementById("calculator");
+
+            document.getElementById("syra-login-container").addEventListener("syra:login", e => {
+                calculator.style.display = "block";
+            });
+
+            document.getElementById("syra-login-container").addEventListener("syra:logout", () => {
+                calculator.style.display = "none";
+            });
+
+            // Se token já existia no carregamento, exibe direto
+            if (localStorage.getItem('syra_jwt')) {
+                calculator.style.display = "block";
+            }
+        });
+
+        function calcular() {
+            const n1 = parseFloat(document.getElementById("num1").value);
+            const n2 = parseFloat(document.getElementById("num2").value);
+            const result = isNaN(n1) || isNaN(n2) ? "Valores inválidos" : `Resultado: ${n1 + n2}`;
+            document.getElementById("result").textContent = result;
+        }
+    </script>
+
+</body>
+</html>
